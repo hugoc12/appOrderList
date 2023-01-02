@@ -1,38 +1,136 @@
-.App {
-  text-align: center;
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+
+h1{
+    text-align: center;
+    margin:20px 0px
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+input[type='text']{
+    display: block;
+    margin:10px auto;
+    padding: 8px;
+    width: 60%;
+    outline: none;
+    border:solid 1px rgb(201, 201, 201);
+    border-radius: 5px;
+    font-size: 20px;
+    text-align: center;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+select{
+    display: block;
+    margin:10px auto;
+    padding: 8px;
+    width: 60%;
+    outline: none;
+    border:solid 1px rgb(201, 201, 201);
+    border-radius: 5px;
+    font-size: 20px;
+    text-align: center;
 }
 
-.App-link {
-  color: #61dafb;
+.bttAdd{
+    display: block;
+    border: none;
+    outline: none;
+    padding: 8px;
+    width: 60%;
+    margin:10px auto;
+    border-radius: 5px;
+    font-size: 20px;
+    background-color: #0073aa;
+    color: #fff;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.bttAdd:hover{
+    cursor: pointer;
+    background-color: #0584be;
+    color: #fff;
+}
+
+.bttAdd:active{
+    background-color: #0073aa;
+}
+
+ul{
+    width: 60%;
+    margin:10px auto 80px auto;
+    list-style: none;
+}
+
+ul li{
+    background-color: #f8da77;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    font-size: 18px;
+    border-radius: 5px;
+    margin:5px 0px;
+}
+
+.liHeader{
+    background-color: #FDC400;
+    color: #fff;
+    font-weight: bold;
+}
+
+.liPedido span, .liHeader span{
+    width: 180px;
+    text-align: center;
+}
+
+.bttRemove{
+    width: 20px;
+    height: 20px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    background-color: rgb(185, 81, 81);
+    color: #fff;
+}
+
+.bttRemove:hover{
+    background-color: red;
+    cursor: pointer;
+}
+
+.containerImg{
+    text-align: center;
+    margin:40px 0px;
+}
+
+.bttSave{
+    width: 60px;
+    position: absolute;
+    right: 10%;
+    top: 8%;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.bttSave:hover{
+    background-color: #0073aa;
+    border-radius: 8px;
+    transition: 0.5s;
+}
+
+.bttSave:active{
+    background-color: #FDC400;
+}
+
+
+@media screen and (max-width:820px) {
+    ul{
+        width: 100%;
+    }
 }
