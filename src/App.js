@@ -21,7 +21,7 @@ export default function App(){
       try{
         const response1 = await caches.open(nameCache);
         await response1.put(url, data);
-        alert('Dados adicionados com sucesso!');
+        //alert('Dados adicionados com sucesso!');
 
       }catch(err){
         console.log(`HOUVE UM ERRO DE CACHE! ${err}`);
@@ -62,19 +62,23 @@ export default function App(){
     setNumeroPedido('');
     setNomeVendedor('');
     setNomeCliente('');
+
+    addDataCache('MyCache1', 'https://localhost/3000', [...newArry])
   }
 
   function delPedido(ind){
     let clonePedidos = [...pedidos];
     clonePedidos.splice(ind, 1);
     setPedidos([...clonePedidos]);
+    console.log(pedidos);
+    addDataCache('MyCache1', 'https://localhost/3000', [...clonePedidos])
   }
 
   return(
     <div className="containerApp">
       <div className="containerImg">
         <img alt="logo" className="imgLogo" src={require('./assets/imgs/logo.png')}/>
-        <img alt="bttSave" className="bttSave" src={require('./assets/imgs/dataSave.png')} onClick={()=>addDataCache('MyCache1', 'https://localhost/3000', pedidos)}/>
+        <img alt="bttImprimir" className="bttImprimir" src={require('./assets/imgs/imprimir.png')} onClick={()=>window.print()}/>
       </div>
       <div className="dvForm">
         <input ref={inputNumeroPedido} type="text" placeholder="Número do pedido..." onChange={(txt)=>{

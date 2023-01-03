@@ -109,7 +109,7 @@ ul li{
     margin:40px 0px;
 }
 
-.bttSave{
+.bttImprimir{
     width: 60px;
     position: absolute;
     right: 10%;
@@ -118,13 +118,13 @@ ul li{
     padding: 5px;
 }
 
-.bttSave:hover{
+.bttImprimir:hover{
     background-color: #0073aa;
     border-radius: 8px;
     transition: 0.5s;
 }
 
-.bttSave:active{
+.bttImprimir:active{
     background-color: #FDC400;
 }
 
