@@ -60,8 +60,8 @@ select{
 }
 
 ul{
-    width: 60%;
-    margin:10px auto 80px auto;
+    width: 80%;
+    margin:20px auto 80px auto;
     list-style: none;
 }
 
@@ -87,6 +87,10 @@ ul li{
 .liPedido span, .liHeader span{
     width: 180px;
     text-align: center;
+}
+
+span.typeOrder{
+    font-weight: bold;
 }
 
 .bttRemove{

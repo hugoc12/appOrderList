@@ -4,12 +4,17 @@ export default function App(){
   const inputNumeroPedido = useRef(null);
   const inputNomeVendedor = useRef(null);
   const inputNomeCliente = useRef(null);
+  const inputTypeOrder = useRef(null);
+  const inputValueShipping = useRef(null);
 
   const [pedidos, setPedidos] = useState([]);
 
   const[numeroPedido, setNumeroPedido] = useState('');
-  const[nomeCliente, setNomeCliente] = useState('');
+  const[nomeCliente, setNomeCliente] = useState('-');
   const[nomeVendedor, setNomeVendedor] = useState('');
+  const[typeOrder, setTypeOrder] = useState('ENTREGAR');
+  const[valueShipping, setValueShipping] = useState('');
+  const[payShipping, setPayShipping] = useState(false);
 
   useEffect(()=>{
     getDataCache('MyCache1', 'https://localhost/3000')
@@ -46,11 +51,13 @@ export default function App(){
     }
   }
 
-  function addPedido(numero, cliente, vendedor){
+  function addPedido(numero, cliente, vendedor, typeOrder, valueShipping){
     const newArry = [...pedidos, {
       numeroPedido:numero,
       cliente:cliente,
-      vendedor:vendedor
+      vendedor:vendedor,
+      typeOrder:typeOrder,
+      valueShipping:valueShipping
     }]
 
     setPedidos([...newArry]);
@@ -58,10 +65,13 @@ export default function App(){
     inputNumeroPedido.current.value= '';
     inputNomeVendedor.current.value = '';
     inputNomeCliente.current.value = '';
+    inputTypeOrder.current.value = 'ENTREGAR';
 
     setNumeroPedido('');
     setNomeVendedor('');
-    setNomeCliente('');
+    setNomeCliente('-');
+    setPayShipping(false);
+    setTypeOrder('ENTREGAR');
 
     addDataCache('MyCache1', 'https://localhost/3000', [...newArry])
   }
@@ -90,7 +100,7 @@ export default function App(){
           }
         }}></input>
 
-        <select ref={inputNomeVendedor} onChange={(value)=>setNomeVendedor(value.target.value)}>
+        <select ref={inputNomeVendedor} onChange={(input)=>setNomeVendedor(input.target.value)}>
           <option value={''}>Selecione o vendedor...</option>
           <option value={'Fernando Jorge'}>Fernando Jorge</option>
           <option value={'Valeria Paumgartten'}>Valeria Paumgartten</option>
@@ -115,9 +125,31 @@ export default function App(){
           
         }}></input>
 
+        <select ref={inputTypeOrder} onChange={(input)=>{
+          setTypeOrder(input.target.value);
+          if(input.target.value === 'BOY-EXTRA'){
+            setPayShipping(true);
+          }else{
+            setPayShipping(false);
+          }
+        }}>
+          <option value={'ENTREGAR'}>ENTREGAR</option>
+          <option value={'RETIRAR PGTO'}>RETIRAR PGTO</option>
+          <option value={'RETIRAR MATERIAL'}>RETIRAR MATERIAL</option>
+          <option value={'BOY-EXTRA'}>BOY-EXTRA</option>
+        </select>
+
+        {payShipping?
+          <input ref={inputValueShipping} type="text" placeholder="VALOR(R$)" onChange={(input)=>{
+            setValueShipping(input.target.value);
+          }}></input>
+          :
+          <></>
+        }
+      
         <button className="bttAdd" onClick={()=>{
           if(numeroPedido && nomeCliente && nomeVendedor){
-            addPedido(numeroPedido, nomeCliente, nomeVendedor)
+            addPedido(numeroPedido, nomeCliente, nomeVendedor, typeOrder, valueShipping)
           }else{
             alert('PREENCHA TODAS AS INFOMAÇÕES!')
           }
@@ -130,6 +162,7 @@ export default function App(){
           <span>Nº PEDIDO</span>
           <span>CLIENTE</span>
           <span>VENDEDOR</span>
+          <span>---</span>
         </li>
 
         {pedidos.map((el, ind, arr)=>{
@@ -138,6 +171,7 @@ export default function App(){
               <span>{el.numeroPedido}</span>
               <span>{el.cliente}</span>
               <span>{el.vendedor}</span>
+              <span className="typeOrder">{el.typeOrder}{el.typeOrder === 'BOY-EXTRA'?` - R$${el.valueShipping}.00`:''}</span>
               <button className="bttRemove" onClick={()=>delPedido(ind)}>X</button>
             </li>)
         })}
