@@ -4,12 +4,17 @@ export default function App(){
   const inputNumeroPedido = useRef(null);
   const inputNomeVendedor = useRef(null);
   const inputNomeCliente = useRef(null);
+  const inputTypeOrder = useRef(null);
+  const inputValueShipping = useRef(null);
 
   const [pedidos, setPedidos] = useState([]);
 
   const[numeroPedido, setNumeroPedido] = useState('');
-  const[nomeCliente, setNomeCliente] = useState('');
+  const[nomeCliente, setNomeCliente] = useState('-');
   const[nomeVendedor, setNomeVendedor] = useState('');
+  const[typeOrder, setTypeOrder] = useState('ENTREGAR');
+  const[valueShipping, setValueShipping] = useState('');
+  const[payShipping, setPayShipping] = useState(false);
 
   useEffect(()=>{
     getDataCache('MyCache1', 'https://localhost/3000')
@@ -21,7 +26,7 @@ export default function App(){
       try{
         const response1 = await caches.open(nameCache);
         await response1.put(url, data);
-        alert('Dados adicionados com sucesso!');
+        //alert('Dados adicionados com sucesso!');
 
       }catch(err){
         console.log(`HOUVE UM ERRO DE CACHE! ${err}`);
@@ -46,11 +51,13 @@ export default function App(){
     }
   }
 
-  function addPedido(numero, cliente, vendedor){
+  function addPedido(numero, cliente, vendedor, typeOrder, valueShipping){
     const newArry = [...pedidos, {
       numeroPedido:numero,
       cliente:cliente,
-      vendedor:vendedor
+      vendedor:vendedor,
+      typeOrder:typeOrder,
+      valueShipping:valueShipping
     }]
 
     setPedidos([...newArry]);
@@ -58,23 +65,30 @@ export default function App(){
     inputNumeroPedido.current.value= '';
     inputNomeVendedor.current.value = '';
     inputNomeCliente.current.value = '';
+    inputTypeOrder.current.value = 'ENTREGAR';
 
     setNumeroPedido('');
     setNomeVendedor('');
-    setNomeCliente('');
+    setNomeCliente('-');
+    setPayShipping(false);
+    setTypeOrder('ENTREGAR');
+
+    addDataCache('MyCache1', 'https://localhost/3000', [...newArry])
   }
 
   function delPedido(ind){
     let clonePedidos = [...pedidos];
     clonePedidos.splice(ind, 1);
     setPedidos([...clonePedidos]);
+    console.log(pedidos);
+    addDataCache('MyCache1', 'https://localhost/3000', [...clonePedidos])
   }
 
   return(
     <div className="containerApp">
       <div className="containerImg">
         <img alt="logo" className="imgLogo" src={require('./assets/imgs/logo.png')}/>
-        <img alt="bttSave" className="bttSave" src={require('./assets/imgs/dataSave.png')} onClick={()=>addDataCache('MyCache1', 'https://localhost/3000', pedidos)}/>
+        <img alt="bttImprimir" className="bttImprimir" src={require('./assets/imgs/imprimir.png')} onClick={()=>window.print()}/>
       </div>
       <div className="dvForm">
         <input ref={inputNumeroPedido} type="text" placeholder="Número do pedido..." onChange={(txt)=>{
@@ -86,7 +100,7 @@ export default function App(){
           }
         }}></input>
 
-        <select ref={inputNomeVendedor} onChange={(value)=>setNomeVendedor(value.target.value)}>
+        <select ref={inputNomeVendedor} onChange={(input)=>setNomeVendedor(input.target.value)}>
           <option value={''}>Selecione o vendedor...</option>
           <option value={'Fernando Jorge'}>Fernando Jorge</option>
           <option value={'Valeria Paumgartten'}>Valeria Paumgartten</option>
@@ -111,9 +125,31 @@ export default function App(){
           
         }}></input>
 
+        <select ref={inputTypeOrder} onChange={(input)=>{
+          setTypeOrder(input.target.value);
+          if(input.target.value === 'BOY-EXTRA'){
+            setPayShipping(true);
+          }else{
+            setPayShipping(false);
+          }
+        }}>
+          <option value={'ENTREGAR'}>ENTREGAR</option>
+          <option value={'RETIRAR PGTO'}>RETIRAR PGTO</option>
+          <option value={'RETIRAR MATERIAL'}>RETIRAR MATERIAL</option>
+          <option value={'BOY-EXTRA'}>BOY-EXTRA</option>
+        </select>
+
+        {payShipping?
+          <input ref={inputValueShipping} type="text" placeholder="VALOR(R$)" onChange={(input)=>{
+            setValueShipping(input.target.value);
+          }}></input>
+          :
+          <></>
+        }
+      
         <button className="bttAdd" onClick={()=>{
           if(numeroPedido && nomeCliente && nomeVendedor){
-            addPedido(numeroPedido, nomeCliente, nomeVendedor)
+            addPedido(numeroPedido, nomeCliente, nomeVendedor, typeOrder, valueShipping)
           }else{
             alert('PREENCHA TODAS AS INFOMAÇÕES!')
           }
@@ -126,6 +162,7 @@ export default function App(){
           <span>Nº PEDIDO</span>
           <span>CLIENTE</span>
           <span>VENDEDOR</span>
+          <span>---</span>
         </li>
 
         {pedidos.map((el, ind, arr)=>{
@@ -134,6 +171,7 @@ export default function App(){
               <span>{el.numeroPedido}</span>
               <span>{el.cliente}</span>
               <span>{el.vendedor}</span>
+              <span className="typeOrder">{el.typeOrder}{el.typeOrder === 'BOY-EXTRA'?` - R$${el.valueShipping}.00`:''}</span>
               <button className="bttRemove" onClick={()=>delPedido(ind)}>X</button>
             </li>)
         })}
