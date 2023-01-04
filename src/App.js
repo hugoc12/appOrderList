@@ -122,6 +122,7 @@ export default function App(){
             setNomeCliente(txt.target.value)
           }else{
             inputNomeCliente.current.value = '';
+            setNomeCliente('-');
           }
           
         }}></input>
