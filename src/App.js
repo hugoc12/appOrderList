@@ -102,6 +102,7 @@ export default function App(){
 
         <select ref={inputNomeVendedor} onChange={(input)=>setNomeVendedor(input.target.value)}>
           <option value={''}>Selecione o vendedor...</option>
+          <option value={'Site'}>Site</option>
           <option value={'Fernando Jorge'}>Fernando Jorge</option>
           <option value={'Valeria Paumgartten'}>Valeria Paumgartten</option>
           <option value={'Edgar Henrique'}>Edgar Henrique</option>
@@ -121,6 +122,7 @@ export default function App(){
             setNomeCliente(txt.target.value)
           }else{
             inputNomeCliente.current.value = '';
+            setNomeCliente('-');
           }
           
         }}></input>
